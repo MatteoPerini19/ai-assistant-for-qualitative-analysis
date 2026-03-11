@@ -26,5 +26,5 @@ outputs/
 *.pkl
 *.parquet
 
-# Temporary files 
-project_management/
+# Keep project source material tracked
+!example_writing_samples.csv
