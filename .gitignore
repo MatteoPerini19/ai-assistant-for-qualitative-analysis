@@ -2,12 +2,23 @@
 __pycache__/
 *.py[cod]
 *.pyo
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
 
 # Virtual environment
 venv/
+.venv/
 
 # Environment variables
 .env
+.python-version
 
 # macOS
 .DS_Store

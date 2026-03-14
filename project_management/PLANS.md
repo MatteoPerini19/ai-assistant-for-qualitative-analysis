@@ -8,6 +8,18 @@ If you find expressions such as "to discuss" or "we can consider if", choose a s
 
 If there are complex features that are an addition to the core functining of the project (e.g., having a separate script for conducting a comparative analysis), don't include them in the first round of code writing. However, in your answer write a note stating precisely what features described in the blueprint are not implemented yet. 
 
+## ???
+
+Graded relative score: 
+-3  strongly text 1
+-2  moderately text 1
+-1  slightly text 1
+ 0  tie
++1  slightly text 2
++2  moderately text 2
++3  strongly text 2
+
+
 
 ## OPTIONAL FEATURES TO REFLECT ABOUT 
 
@@ -16,6 +28,9 @@ In the prompt for the LLM, include, as context, all or part of all the other tex
 
 Also we need the script to estimate if the context would become too big for the LLM (degrading performance), in which case we should opt for a random sample of N texts provided as context (based on the average length of prompts and the maximum allowed tokens). In the random selection, we can consider prioritizing texts that are similar (i.e., same participant_ID and same task_ID). 
 If additional texts are included as context in the prompt for the LLM, remember to include the task description  related to the text, in case this changes between different prompts (to save tokens, it is better to provide the task description only once, and below that attach all the task-specific comparison texts).
+
+-1.1-
+Bradley–Terry/Thurstone-style comparative analysis 
 
 -2-
 Create X different ways in which we ask the LLM to conduct the task, and include all of them in different prompts. 
@@ -40,6 +55,17 @@ Logprobs / entropy measures
 Specifically for my **study with 4 conditions** per participant, namely 2 treatment conditions (awe) and 2 control conditions (funny, neutral):
 If we evaluate this with the comparative approach, we should compare each text in the treatment condition with both texts in the control conditions, so for each text in the control condition we get comparative judgments for both control texts. 
 
+
+-5-
+Data immutability: compute hashes for input CSV and any referenced text/audio files at runtime (or at least for the subset used).
+
+
+-6-
+Allow multiple types of analyses at the same time. 
+
+E.g., data type. 
+Currently, we write something like this in the config file: 
+    "we should add a note here for the user, that in case they want the LLMs to use different types of data for the same analysis (e.g., one ordinal item and one categortical item), we recommend running the analysis multiple times with different configurations."  
 
 
 ### TO SEARCH 
@@ -72,4 +98,23 @@ Just test if there is a significant difference between the AI outputs given diff
 4. ...
 
 
----
+## Generalizing features 
+
+This sectopm contains a (likely incomplete) description of the features that should the project that, for how I'm writing it, are specific for my studies and that, for making the software public, should be generalized. 
+
+
+### Name of the variables and files 
+
+Depending on how we let the user interact with the software, we should find a smooth way to make this software compatible with the user's dataset and files. 
+
+E.g.:
+- Name of the dataset 
+- Name of the variables 
+- Name of the audio or text files 
+- Folders 
+
+For features we should allow multiple options:
+- The texts are within the main csv file or as separate files 
+- ...
+
+

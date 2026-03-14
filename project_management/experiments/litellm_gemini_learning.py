@@ -3,7 +3,7 @@
 LiteLLM + Gemini learning script.
 
 Setup:
-  1) Install: pip install litellm
+  1) Install project dependencies: pip install -e .
   2) Export your key: export GEMINI_API_KEY="...your key..."
   3) Run a demo: python litellm_gemini_learning.py basic
 """
