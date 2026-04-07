@@ -43,3 +43,6 @@ outputs/
 !example_writing_samples.csv
 !tests/fixtures/first_pass_project/data/
 !tests/fixtures/first_pass_project/data/participant_text_samples.csv
+
+# Project management
+project_management/
