@@ -1,0 +1,66 @@
+run_mode: testing
+comparative_analysis: false
+include_task_info: true
+
+input_data:
+  dataset_file: tests/fixtures/first_pass_project/data/participant_text_samples.csv
+  column_mapping:
+    row_id: source_row_id
+    participant_id: subject_code
+    task_id: prompt_code
+    task_label: prompt_label
+    task_info: prompt_short_description
+    task_full_text: prompt_full_text
+    participant_text: essay_text
+    language: lang
+    condition: experimental_condition
+    wave: timepoint
+
+prompt_template_file: prompts/prompt_template_psychological_depth_main_analysis.txt
+prompt_id: psychological_depth_solo_reflection
+prompt_version: "v1"
+analysis_instructions_file: prompts/analysis_instructions_psychological_depth_main_analysis.txt
+
+model_set: openai_smoke_set
+model_sets:
+  openai_smoke_set:
+    - model_provider: openai
+      model_name: gpt-4.1-mini
+      method_name: main_analysis
+
+repeated_calls:
+  count: 1
+  temperature: 0.0
+
+merge_output: false
+retain_raw_json_output: true
+output_data_type: ordinal
+
+analysis_schema:
+  schema_name: psychological_depth_solo_reflection_v1
+  schema_version: "1.0"
+  items:
+    - item_id: overall_depth
+      score_key: overall_depth_score
+      justification_key: overall_depth_justification
+      score_type: integer
+      min_score: 1
+      max_score: 7
+    - item_id: fundamental_principles
+      score_key: fundamental_principles_score
+      justification_key: fundamental_principles_justification
+      score_type: integer
+      min_score: 1
+      max_score: 7
+    - item_id: differentiation
+      score_key: differentiation_score
+      justification_key: differentiation_justification
+      score_type: integer
+      min_score: 1
+      max_score: 7
+    - item_id: integration
+      score_key: integration_score
+      justification_key: integration_justification
+      score_type: integer
+      min_score: 1
+      max_score: 7

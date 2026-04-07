@@ -6,7 +6,8 @@ For the first implementation pass, this project should build a simplified versio
 
 ### Simplified constraints for now
 
-- Only **non-comparative analyses** are in scope.
+- `comparative_analysis: true` may appear in `config.yaml` without config-level rejection.
+- The full comparative runtime branch is still a separate implementation path and may remain incomplete while other first-pass pieces are being established.
 - Only **text-only inputs** are in scope.
   - The first implementation should analyze text provided in `participant_text`.
   - Audio inputs are out of scope for now.
@@ -41,6 +42,7 @@ Rules for this initial format:
 - `analysis_schema.items` is the single source of truth for the expected JSON output fields.
 - Each item must define exactly one score field and one justification field.
 - The parser should validate that all required keys exist and that scores fall within the configured range for that item.
+- The substantive user-authored description of what the LLM should evaluate should live in a separate prompt-instructions text file rather than inside `config.yaml`; the config-side schema is the machine-readable output contract.
 - If a future analysis needs a different output shape, that should be added later as a new explicit schema format rather than silently overloading this first one.
 
 The wider blueprint below can still describe future features, but when implementation decisions conflict with future scope, the simplified constraints above should govern the initial build.
@@ -59,6 +61,10 @@ The pipeline should:
 
 1. Read a CSV containing writing samples (one per row) and, if present, information about the specific task from which the writing sample comes (in case the task was not the same for all the writing samples). Note: in some cases, we will not have a writing sample, but the name of a file containing the writing sample and/or an audio file (at least one per row).
 2. Build an LLM prompt from reusable components.
+   - In the preferred first-pass structure, the reusable components include:
+     - a prompt template file,
+     - a user-authored analysis-instructions text file,
+     - row-level task/text fields from the dataset.
 3. Ask the LLM to score one or more qualitative dimensions.
 4. Request a structured JSON output with scores and justifications.
 5. Save each LLM call together with metadata, and optionally retain the verbatim raw JSON output.
@@ -162,6 +168,32 @@ In the config file, especially in this section, it is important to explain to th
 - For comparative analyses, the same strategy should be used, but with canonical names such as `participant_text_1`, `task_id_1`, `participant_text_2`, and `task_id_2`.
 - The pipeline should not rely on fuzzy auto-detection of column names as a primary strategy. If any auto-detection is added later, it should be conservative, transparent, and overrideable by explicit config.
 
+### Assisted config-alignment workflow
+
+When helping a user adapt `config.yaml` to a new study dataset, it is acceptable to use an external LLM such as ChatGPT as a drafting assistant, as long as the workflow stays explicit and auditable.
+
+Recommended workflow:
+
+1. Provide the current `config.yaml`.
+2. Provide the target dataset or, at minimum, its exact column names and a few representative rows.
+3. Ask the assistant to update only the dataset-specific parts of the config unless a broader change is explicitly requested.
+
+Rules for this assisted workflow:
+
+- The assistant should preserve unrelated settings whenever possible.
+- The assistant should update `input_data.dataset_file` and `input_data.column_mapping` to match the user's dataset exactly.
+- The assistant may also point out when optional fields such as `task_label`, `task_info`, `task_full_text`, `language`, `condition`, or `wave` are unavailable and therefore should remain unmapped.
+- The assistant should not invent fuzzy column matches and should not guess silently when multiple plausible mappings exist.
+- If the dataset appears to require an unsupported path in the current implementation scope, such as audio-based input, comparative analysis, or external text-file lookup, the assistant should say so explicitly rather than pretending the current config already supports it.
+- The assistant should keep the machine-readable `analysis_schema` stable unless the user explicitly asks to change the output contract.
+
+Recommended response shape for this workflow:
+
+1. A short compatibility assessment.
+2. The full updated `config.yaml`.
+3. A short list of changed fields.
+4. A short list of ambiguities, unsupported inputs, or follow-up confirmations still needed.
+
 ---
 
 ## Config file
@@ -191,8 +223,15 @@ The project should expose a config file or config object with decisions such as:
   - If the analysis is comparative, the default template is `prompt_template_comparative_analysis.txt`.
   - If the analysis is not comparative, the default template is `prompt_template_main_analysis.txt`.
   - The Python script should read the exact prompt-template filename from `config.yaml` rather than hard-coding prompt names, because users may work with multiple prompt templates targeting different variables.
+- **Which user-authored analysis instructions should be inserted into the prompt?**
+  - Store the exact analysis-instructions filename in `config.yaml`.
+  - Example: `analysis_instructions_file: prompts/analysis_instructions_main_analysis.txt`
+  - This text file should contain the substantive description of what the LLM should score, how each dimension should be interpreted, and how justifications should be written.
+  - This keeps `config.yaml` focused on runtime settings and the machine-readable output contract.
 - **Which scoring instructions should the LLM use?**
-  - e.g., `1-7 scale`, `0-100 scale`, categorical labels, etc. Default: 1-10
+  - Put the user-facing scoring instructions in the analysis-instructions text file rather than in `config.yaml`.
+  - `config.yaml` should still define the machine-readable score range and JSON keys through `analysis_schema.items`.
+  - e.g., the text file can say `Use a 1-7 scale`, while `analysis_schema.items` defines `min_score: 1` and `max_score: 7`.
 - **Temperature.**
   Default: fixed low temperature for deductive scoring.
   - Default if `run_mode: testing`: `0.0`
@@ -233,6 +272,7 @@ The project should expose a config file or config object with decisions such as:
   - If categorical, the aggregation implies reporting the most frequent response plus all the options with the corresponding percentage occurrence, for example: `{"most_frequent_category_item_1": "category_1", "categories_frequencies_item_1": {"category_1": 0.75, "category_2": 0.25}, "n_successful_parses_item_1": 100}`
   - Note: we also have to save all the metadata specified in the `### Metadata to store` subsection under `## What to do with the JSON outputs`.
   - Note: `item_1` refers to the fact the LLM might be asked to score the texts on multiple variables at the same time. 
+  - Note: the conceptual meaning of `item_1`, `item_2`, etc. should be explained in the analysis-instructions text file, not in the runtime comments of `config.yaml`.
   - Note for the user: in case they want the LLMs to use different types of data for the same analysis (e.g., one ordinal item and one categorical item), we recommend running the analysis multiple times with different configurations.
 
 
@@ -475,6 +515,8 @@ Depending on the project, the JSON could also include:
 ## What to do with the JSON outputs
 
 Each LLM response should be saved with metadata.
+Provider-side call failures should also be preserved as structured call rows once request
+metadata is available, rather than being dropped as exception-only events.
 
 ### Metadata to store
 
@@ -501,19 +543,22 @@ Each LLM response should be saved with metadata.
   - the fully rendered prompt actually sent to the LLM after all template fields, task information, and text content have been inserted
 - `raw_json_output`
 - `parse_status`
-  - recommended values: `valid`, `invalid_json`, `schema_mismatch`, `missing_field`
+  - recommended values: `valid`, `invalid_json`, `schema_mismatch`, `missing_field`, `provider_error`
 - `validation_error`
   - store the validation error message verbatim if validation fails
+- `error_message`
+  - store the provider-side error message verbatim when a call fails before returning valid JSON
 
 ### Then the pipeline should:
 
 1. Save every LLM call in `output_ds_inclusive_long.csv`, with one unique `run_id` per row.
-2. Compute summary statistics across repeated calls according to the config choice for `metric/ordinal/categorical` data.
-3. Save those summaries in `output_ds_summaried_wide.csv`.
-4. Run sanity checks and write the diagnostic output.
-5. It is also acceptable to save additional files in `outputs/` when useful, such as intermediate tables, manifests, logs, or debugging artifacts.
-6. The two canonical user-facing output datasets should still be `output_ds_inclusive_long.csv` and `output_ds_summaried_wide.csv`.
-7. Depending on the config file, leave the two output datasets as standalone files or merge them with the original CSV dataset before saving them.
+2. If a provider call fails after request metadata is known, save that attempt as a structured row with `parse_status='provider_error'` and the provider error message rather than surfacing it only as an exception.
+3. Compute summary statistics across repeated calls according to the config choice for `metric/ordinal/categorical` data.
+4. Save those summaries in `output_ds_summaried_wide.csv`.
+5. Run sanity checks and write the diagnostic output.
+6. It is also acceptable to save additional files in `outputs/` when useful, such as intermediate tables, manifests, logs, or debugging artifacts.
+7. The two canonical user-facing output datasets should still be `output_ds_inclusive_long.csv` and `output_ds_summaried_wide.csv`.
+8. Depending on the config file, leave the two output datasets as standalone files or merge them with the original CSV dataset before saving them.
 
 ---
 

@@ -1,0 +1,158 @@
+You are rating one solo written reflection at a time. The surrounding prompt template and output schema already define the required output format. Your task here is to apply the scoring framework below and assign one absolute 1-7 score to each dimension.
+
+IMPORTANT ADAPTATION TO THE CURRENT DATASET
+- The original preregistration described conversations and, in one place, comparative judgments across paired conversations.
+- In this dataset, the unit of analysis is a single solo written reflection.
+- Therefore, do not compare this reflection to any other text.
+- Assign absolute scores based only on this reflection.
+
+DEFINITION OF PSYCHOLOGICAL DEPTH
+Psychological depth is the extent to which a thinker:
+- surfaces and interrogates foundational, often tacit, beliefs or values organizing wide swathes of cognition
+- coordinates multiple, distinct facets of an issue into an internally coherent whole by both differentiating them and integrating them together
+
+CONCEPTUAL STRUCTURE
+- Overall depth/profundity is the broad construct to be rated.
+- Engagement with fundamental principles is one component of psychological depth.
+- Complexity, or integrative complexity, is another component of psychological depth.
+- Complexity has two distinguishable components: differentiation and integration.
+- A reflection can be high on differentiation but lower on integration, or vice versa.
+- High overall depth typically requires at least some strength in both foundational engagement and complexity.
+
+HOW TO USE THE ITEM STATEMENTS BELOW
+- The statements below were originally self-report items. In this task, do not treat them as literal questionnaire endorsements.
+- Instead, use them as semantic anchors for evaluating what is manifested in the reflection text.
+- Items marked (R) indicate the low pole of the construct.
+- Do not look for literal agreement with reverse-worded items. Instead, use them to recognize what low scores look like.
+
+SCORING SCALE FOR ALL FOUR DIMENSIONS
+- 1 = Very low / strongly absent
+- 2 = Low
+- 3 = Somewhat low
+- 4 = Mixed or moderate
+- 5 = Moderately high
+- 6 = High
+- 7 = Very high / strongly present and sustained
+
+GENERAL RATING RULES
+- Score the reflection, not the writer.
+- Use the actual content and structure of thought, not presumed intentions.
+- Do not inflate scores because the topic sounds serious.
+- Do not inflate scores because the writing is emotional, eloquent, abstract, literary, long, or metaphorical.
+- A descriptive narrative with little analysis should score low.
+- A cliche, slogan, or one-dimensional opinion should score low even if the subject matter is serious.
+- Differentiate differentiation from integration: listing multiple aspects without connecting them is not the same as integrating them.
+- Integration requires actual linkage or synthesis.
+- Use the strongest textual evidence, but base the score on the reflection as a whole.
+- Overall depth/profundity should not be reduced to one single feature such as emotional intensity, confession, or abstraction.
+
+DIMENSIONS TO SCORE
+
+1. OVERALL DEPTH / PROFUNDITY VS. SHALLOWNESS / SUPERFICIALITY
+Score how deep/profound versus shallow/superficial the reflection is overall.
+For the low pole, think in terms of ordinary concepts with no theoretical or interpretive scaffolding, routine description, surface treatment, or one-dimensional reflection.
+High scores require more than emotional intensity or abstract wording. They typically involve both:
+- engagement with foundational assumptions, values, or principles
+- meaningful complexity through differentiation and integration
+
+Anchor points:
+- 1: Surface-level, routine, descriptive, or one-dimensional; little or no evidence of foundational reflection or complexity.
+- 4: Some meaningful reflection is present, but it is limited, partial, or uneven.
+- 7: The reflection is strongly deep/profound, clearly engages foundational assumptions or values, and coordinates multiple facets into a coherent whole.
+
+2. ENGAGEMENT WITH FUNDAMENTAL PRINCIPLES
+Use the following item statements as semantic anchors:
+- "My reflection explored basic assumptions and principles that shape either my worldview or my sense of self."
+- "I focused mostly on superficial details rather than on the core ideas behind the issue." (R)
+- "I engaged with beliefs or principles that affect large parts of my thinking, beyond this specific issue."
+- "My reflection remained at a routine level, overlooking deeper causes or premises." (R)
+- "My reflection involved beliefs and values that define who I am."
+- "I reflected on aspects of the issue I usually take for granted."
+- "I dug beneath the surface of the problem, instead of staying at the top layer."
+
+Interpretation:
+This dimension concerns whether the reflection reaches foundational assumptions, worldview-level principles, taken-for-granted premises, core beliefs, identity-defining values, or deeper causes behind the issue.
+
+Anchor points:
+- 1: Almost entirely surface-level; routine details; little or no engagement with assumptions, beliefs, values, or taken-for-granted premises.
+- 4: Some engagement with deeper assumptions or values, but intermittent, limited, or not sustained.
+- 7: Strong and sustained engagement with foundational assumptions, beliefs, values, identity-relevant commitments, or taken-for-granted premises.
+
+3. DIFFERENTIATION OF IDEAS
+Differentiation is one component of complexity, or integrative complexity. It concerns how many genuinely distinct aspects, layers, or perspectives are distinguished within the reflection.
+
+Use the following item statements as semantic anchors:
+- "During the reflection, many different thoughts were coming to my mind, covering distinct aspects of the issue."
+- "I distinguished multiple layers or aspects of the topic."
+- "My reflection was somewhat simplistic, treating the issue as one-dimensional." (R)
+
+Interpretation:
+This dimension concerns whether the reflection distinguishes multiple facets, tensions, layers, perspectives, causes, implications, or conceptual distinctions.
+
+Anchor points:
+- 1: The reflection treats the issue as essentially one-dimensional or simplistic.
+- 4: More than one aspect is acknowledged, but differentiation is limited, thin, or only partly developed.
+- 7: The reflection clearly distinguishes multiple distinct aspects, layers, tensions, or perspectives.
+
+4. INTEGRATION OF IDEAS
+Integration is the second component of complexity, or integrative complexity. It concerns whether distinct ideas are connected into a coherent whole, underlying structure, or larger pattern.
+
+Use the following item statements as semantic anchors:
+- "I integrated various elements or perspectives into a coherent overall picture of the issue."
+- "I linked different ideas together to uncover an underlying structure or larger pattern."
+- "My reflection showed no attempt to connect various ideas into a coherent whole." (R)
+
+Interpretation:
+This dimension concerns whether the reflection actually links its distinct elements together through synthesis, pattern detection, overarching structure, causal organization, or coherent framing.
+
+Anchor points:
+- 1: The reflection presents disconnected points, or no real attempt at synthesis.
+- 4: Some links or partial coherence are present, but integration is limited, local, or incomplete.
+- 7: The reflection clearly connects distinct ideas into a coherent, organized, and illuminating whole.
+
+IMPORTANT DISTINCTIONS
+- A reflection may be high in differentiation but lower in integration if it raises many distinct points without connecting them.
+- A reflection may show some coherence yet still be low in differentiation if it develops only one narrow line of thought.
+- Emotional intensity, confessional openness, abstraction, eloquence, or metaphor use do not by themselves demonstrate differentiation or integration.
+- A reflection can discuss very serious material yet still be shallow if it remains descriptive, routine, slogan-like, or conceptually one-dimensional.
+
+FINAL INSTRUCTION
+Assign one 1-7 score for each of these four dimensions:
+- overall depth/profundity
+- engagement with fundamental principles
+- differentiation of ideas
+- integration of ideas
+
+Justify each score briefly using concrete evidence from the reflection.
+
+OUTPUT REQUIREMENTS
+- Return exactly one JSON object.
+- Do not return markdown.
+- Do not wrap the JSON in code fences.
+- Do not add any text before or after the JSON.
+- Do not add extra keys.
+- Use exactly the keys listed below.
+- Each `*_score` value must be a JSON integer from 1 to 7.
+- Each `*_justification` value must be a non-empty JSON string.
+
+Required JSON keys:
+- overall_depth_score
+- overall_depth_justification
+- fundamental_principles_score
+- fundamental_principles_justification
+- differentiation_score
+- differentiation_justification
+- integration_score
+- integration_justification
+
+JSON shape to follow exactly:
+{
+  "overall_depth_score": 1,
+  "overall_depth_justification": "Short evidence-based justification.",
+  "fundamental_principles_score": 1,
+  "fundamental_principles_justification": "Short evidence-based justification.",
+  "differentiation_score": 1,
+  "differentiation_justification": "Short evidence-based justification.",
+  "integration_score": 1,
+  "integration_justification": "Short evidence-based justification."
+}

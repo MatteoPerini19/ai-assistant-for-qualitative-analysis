@@ -4,6 +4,7 @@ import socket
 
 import pytest
 
+from ai_qualitative_analysis.pipeline import parse_provider_output
 from enums import MockScenario, ParseStatus
 from providers.mock import MockProvider
 from schemas import AnalysisOutputSchema, OutputFieldSpec, ProviderRequest, ScoreRange, validate_raw_output
@@ -16,7 +17,10 @@ def build_request() -> ProviderRequest:
         model_name="mock-model",
         method_name="main_analysis",
         prompt_template_file="prompt_template_main_analysis.txt",
+        prompt_id="main_analysis",
         prompt_version="v1",
+        schema_name="main_analysis",
+        schema_version="v1",
         effective_prompt="Score this writing sample and return JSON.",
         output_schema=AnalysisOutputSchema(
             schema_name="main_analysis",
@@ -59,20 +63,23 @@ def test_mock_provider_supports_all_required_scenarios(
     provider = MockProvider(scenario=scenario)
     response = provider.generate(build_request())
 
-    assert response.parse_status == expected_status
     assert response.metadata.model_provider == "mock"
     assert response.metadata.model_name == "mock-model"
     assert response.metadata.server_side_version == "mock-provider-v1"
 
     if scenario == MockScenario.PROVIDER_ERROR:
-        # 🔴 ASSUMPTION: Provider errors should be returned as structured response objects rather
-        # than raised, so later pipeline stages can persist failed calls in the inclusive-long file.
+        # Provider failures stay in-band so later pipeline stages can persist failed
+        # calls in the inclusive-long file with the same row shape as successful calls.
         assert response.raw_output_text is None
         assert response.parsed_output is None
+        assert response.parse_status is ParseStatus.PROVIDER_ERROR
         assert response.error_message == "Mock provider forced provider_error scenario"
         return
 
     assert response.raw_output_text is not None
+    assert response.parse_status is None
+    validation = parse_provider_output(response, build_request().output_schema)
+    assert validation.parse_status == expected_status
 
 
 def test_mock_provider_valid_scenario_is_deterministic() -> None:
@@ -92,8 +99,8 @@ def test_mock_provider_valid_scenario_avoids_network_calls(monkeypatch: pytest.M
 
     response = MockProvider(scenario=MockScenario.VALID).generate(build_request())
 
-    assert response.parse_status == ParseStatus.VALID
-    assert response.parsed_output is not None
+    assert response.raw_output_text is not None
+    assert parse_provider_output(response, build_request().output_schema).parse_status is ParseStatus.VALID
 
 
 def test_validate_raw_output_rejects_non_object_json() -> None:

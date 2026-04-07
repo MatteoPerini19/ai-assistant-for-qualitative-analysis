@@ -1,0 +1,84 @@
+# First-pass runtime config.
+# Paths are resolved relative to this file.
+
+# Use `testing` for smoke runs and `main_analysis` for larger runs.
+run_mode: testing
+
+# Accepted by config validation, but the full runtime branch is still deferred.
+comparative_analysis: false
+
+# Include available row-level task fields in the rendered prompt.
+include_task_info: true
+
+input_data:
+  # Input CSV.
+  dataset_file: data/qualitative_data/simulated_dataset_qualitative_data.csv
+
+  # Map canonical names to source columns when your dataset uses different names.
+  # Leave this empty if your CSV already uses canonical names.
+  column_mapping: {}
+
+# Prompt template file used for rendering.
+prompt_template_file: prompts/prompt_template_main_analysis.txt
+
+# Stable prompt identifier for metadata.
+prompt_id: main_analysis
+
+# Version of the prompt wording / assembly.
+prompt_version: "v1"
+
+# User-authored scoring instructions inserted into the prompt.
+analysis_instructions_file: prompts/analysis_instructions_main_analysis.txt
+
+# Name of the model set to run.
+model_set: cheap_set
+
+# Available model sets.
+model_sets:
+  cheap_set:
+    - model_provider: mock
+      model_name: mock-first-pass
+      method_name: main_analysis
+  openai_smoke_set:
+    - model_provider: openai
+      model_name: gpt-5-nano
+      method_name: main_analysis
+
+repeated_calls:
+  # Number of repeated calls per identical prompt/model combination.
+  count: 3
+
+  # Fixed temperature for all repeats in a call group.
+  temperature: 0.0
+
+# Append original dataset columns back onto outputs using `row_id`.
+merge_output: false
+
+# Keep the provider's raw JSON output in the long output file.
+retain_raw_json_output: true
+
+# Summary treatment for repeated numeric outputs.
+output_data_type: metric
+
+analysis_schema:
+  # Human-readable schema name.
+  schema_name: main_analysis_v1
+
+  # Version of the machine-readable output contract.
+  schema_version: "1.0"
+
+  # Expected JSON fields returned by the model.
+  items:
+    - item_id: item_1
+      score_key: item_1_score
+      justification_key: item_1_justification
+      score_type: integer
+      min_score: 1
+      max_score: 7
+
+    - item_id: item_2
+      score_key: item_2_score
+      justification_key: item_2_justification
+      score_type: integer
+      min_score: 1
+      max_score: 7

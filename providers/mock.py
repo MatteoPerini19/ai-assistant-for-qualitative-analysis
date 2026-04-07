@@ -10,7 +10,6 @@ from schemas import (
     ProviderRequest,
     ProviderResponse,
     ProviderResponseMetadata,
-    validate_raw_output,
 )
 
 
@@ -33,7 +32,10 @@ class MockProvider(AnalysisProvider):
             server_side_version=self.server_side_version,
             method_name=request.method_name,
             prompt_template_file=request.prompt_template_file,
+            prompt_id=request.prompt_id,
             prompt_version=request.prompt_version,
+            schema_name=request.schema_name,
+            schema_version=request.schema_version,
             task_type=request.task_type,
             requested_temperature=request.requested_temperature,
             effective_temperature=request.effective_temperature,
@@ -41,26 +43,19 @@ class MockProvider(AnalysisProvider):
             seed=request.seed,
         )
 
-        # 🔴 HIGH-RISK ASSUMPTION: Provider failures are returned as structured response objects
-        # with parse_status='provider_error' instead of raising exceptions. Alternatives include
-        # raising exceptions for callers to catch or defining a separate error envelope. This path
-        # keeps one auditable contract for both successful and failed calls in the initial pipeline.
         if self.scenario == MockScenario.PROVIDER_ERROR:
+            # Provider-side failures stay in-band so the inclusive-long dataset can
+            # preserve one auditable call-record shape for both success and failure.
             return ProviderResponse(
                 raw_output_text=None,
-                parsed_output=None,
                 parse_status=ParseStatus.PROVIDER_ERROR,
                 error_message="Mock provider forced provider_error scenario",
                 metadata=metadata,
             )
 
         raw_output_text = self._build_raw_output(request)
-        validation = validate_raw_output(raw_output_text, request.output_schema)
         return ProviderResponse(
             raw_output_text=raw_output_text,
-            parsed_output=validation.parsed_output,
-            parse_status=validation.parse_status,
-            validation_error=validation.validation_error,
             metadata=metadata,
         )
 

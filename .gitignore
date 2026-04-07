@@ -31,7 +31,9 @@ venv/
 *.log
 
 # Data and outputs 
-data/
+data/**
+!data/datasets/
+!data/datasets/dataset_config.yaml
 outputs/
 *.csv
 *.pkl
@@ -39,3 +41,5 @@ outputs/
 
 # Keep project source material tracked
 !example_writing_samples.csv
+!tests/fixtures/first_pass_project/data/
+!tests/fixtures/first_pass_project/data/participant_text_samples.csv

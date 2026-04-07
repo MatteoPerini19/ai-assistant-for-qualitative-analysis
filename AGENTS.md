@@ -10,10 +10,10 @@
 - Read runtime behavior from config files or typed settings objects rather than hard-coding model names, prompt-template filenames, thresholds, or analysis modes.
 
 ## Current implementation scope
-- First pass scope is non-comparative analysis only.
+- `comparative_analysis: true` may appear in `config.yaml` without config-level rejection.
 - First pass scope is text-only input from `participant_text` only.
 - Audio handling is deferred until a later scope expansion.
-- Comparative analysis is deferred until a later scope expansion.
+- The full comparative runtime branch is still a later scope expansion.
 - Live provider calls are deferred while the repository is still establishing its first-pass package and validation skeleton.
 - Use one explicit `analysis_schema` structure in `config.yaml` as the source of truth for expected scored items and output fields.
 - Keep the repository structure ready for package code and thin future wrappers, but do not silently implement deferred features.

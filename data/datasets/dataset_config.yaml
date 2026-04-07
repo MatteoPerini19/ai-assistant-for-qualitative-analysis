@@ -1,0 +1,19 @@
+# Dataset mapping worksheet.
+# Use this to draft dataset_file and column_mapping before copying them into config.yaml.
+
+dataset:
+  # Study CSV to map.
+  dataset_file: data/datasets/simulated_dataset_qualitative_data.csv
+
+  # Canonical pipeline fields on the left, source columns on the right.
+  column_mapping:
+    row_id: row_id
+    participant_id: participant_id
+    task_id: task_id
+    task_label: task_label
+    task_info: task_info
+    task_full_text: task_full_text
+    participant_text: participant_text
+    language: language
+    condition: condition
+    wave: wave

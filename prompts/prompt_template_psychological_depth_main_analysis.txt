@@ -1,0 +1,18 @@
+You are rating one solo written reflection at a time.
+
+Analysis instructions:
+{{ analysis_instructions }}
+
+Task label:
+{{ task_label }}
+
+Task information:
+{{ task_info }}
+
+Full task wording:
+{{ task_full_text }}
+
+Participant text:
+{{ participant_text }}
+
+Return exactly one JSON object that uses the score and justification keys required by the active analysis schema.

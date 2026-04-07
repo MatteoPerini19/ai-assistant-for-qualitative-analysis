@@ -1,0 +1,45 @@
+run_mode: testing
+input_data:
+  dataset_file: data/participant_text_samples.csv
+  column_mapping:
+    row_id: source_row_id
+    participant_id: subject_code
+    task_id: prompt_code
+    task_label: prompt_label
+    task_info: prompt_short_description
+    task_full_text: prompt_full_text
+    participant_text: essay_text
+    language: lang
+    condition: experimental_condition
+    wave: timepoint
+prompt_template_file: prompts/prompt_template_main_analysis.txt
+prompt_id: main_analysis
+prompt_version: "v1"
+analysis_instructions_file: prompts/analysis_instructions_main_analysis.txt
+model_set: cheap_set
+model_sets:
+  cheap_set:
+    - model_provider: mock
+      model_name: mock-first-pass
+      method_name: main_analysis
+repeated_calls:
+  count: 3
+  temperature: 0.0
+merge_output: false
+output_data_type: metric
+analysis_schema:
+  schema_name: main_analysis_v1
+  schema_version: "1.0"
+  items:
+    - item_id: item_1
+      score_key: item_1_score
+      justification_key: item_1_justification
+      score_type: integer
+      min_score: 1
+      max_score: 7
+    - item_id: item_2
+      score_key: item_2_score
+      justification_key: item_2_justification
+      score_type: integer
+      min_score: 1
+      max_score: 7

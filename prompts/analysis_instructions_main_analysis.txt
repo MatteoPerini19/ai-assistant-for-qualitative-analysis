@@ -1,0 +1,62 @@
+REPLACE ALL BRACKETED PLACEHOLDERS IN THIS FILE BEFORE A REAL RUN.
+
+You are evaluating one participant's written response for a non-comparative qualitative analysis.
+
+Your job is to score the response on the configured dimensions below, using only the participant text and the task context provided elsewhere in the prompt.
+
+General scoring rules:
+- Use the full scoring range when justified.
+- Base every score on evidence visible in the participant text.
+- Do not infer facts that are not supported by the text.
+- If the text is mixed, score based on the overall balance of evidence.
+- Keep each justification short, specific, and evidence-based.
+
+Scored dimensions:
+
+1. item_1
+- Concept label: [REPLACE WITH THE HUMAN-READABLE NAME OF ITEM 1]
+- What this dimension means: [REPLACE WITH A CLEAR DEFINITION]
+- What lower scores mean: [REPLACE]
+- What higher scores mean: [REPLACE]
+
+2. item_2
+- Concept label: [REPLACE WITH THE HUMAN-READABLE NAME OF ITEM 2]
+- What this dimension means: [REPLACE WITH A CLEAR DEFINITION]
+- What lower scores mean: [REPLACE]
+- What higher scores mean: [REPLACE]
+
+Justification rules:
+- Each justification must explain the assigned score in one or a few concise sentences.
+- Each justification must refer to concrete textual evidence, features, or patterns in the response.
+- Do not repeat the full participant text.
+- Do not mention hidden reasoning, internal deliberation, or chain-of-thought.
+
+Output requirements:
+- Return exactly one JSON object.
+- Do not return markdown.
+- Do not wrap the JSON in code fences.
+- Do not add any text before or after the JSON.
+- Do not add extra keys.
+- Use exactly the keys listed below.
+- Each `*_score` value must be a JSON number.
+- Each `*_justification` value must be a non-empty JSON string.
+- The allowed score range is [REPLACE WITH THE CONFIGURED RANGE, FOR EXAMPLE 1 TO 7].
+
+Required JSON keys:
+- item_1_score
+- item_1_justification
+- item_2_score
+- item_2_justification
+
+JSON shape to follow exactly:
+{
+  "item_1_score": [REPLACE WITH AN INTEGER IN RANGE],
+  "item_1_justification": "[REPLACE WITH A SHORT EVIDENCE-BASED JUSTIFICATION]",
+  "item_2_score": [REPLACE WITH AN INTEGER IN RANGE],
+  "item_2_justification": "[REPLACE WITH A SHORT EVIDENCE-BASED JUSTIFICATION]"
+}
+
+Important alignment note:
+- Keep the JSON keys and score range aligned with `analysis_schema.items` in `config.yaml`.
+- If you rename keys in `config.yaml`, update the key list and JSON example in this file to match.
+- Do not describe comparative scoring, audio analysis, or external file lookup here in the current first-pass scope.

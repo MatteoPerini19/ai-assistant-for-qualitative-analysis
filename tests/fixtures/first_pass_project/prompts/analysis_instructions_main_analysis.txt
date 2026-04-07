@@ -1,0 +1,14 @@
+Evaluate the response on two configured dimensions.
+
+For item_1, score how reflective and psychologically insightful the response is.
+For item_2, score how coherent, clear, and well-supported the response is.
+
+Use the active 1-7 scoring range for each item.
+
+Each justification should be concise, evidence-based, and grounded in the participant text.
+
+Return exactly these JSON keys and no substitutes:
+- item_1_score
+- item_1_justification
+- item_2_score
+- item_2_justification

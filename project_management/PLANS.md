@@ -67,6 +67,15 @@ E.g., data type.
 Currently, we write something like this in the config file: 
     "we should add a note here for the user, that in case they want the LLMs to use different types of data for the same analysis (e.g., one ordinal item and one categortical item), we recommend running the analysis multiple times with different configurations."  
 
+### OTHER PLATFORMS 
+
+-1-
+🟢 Fastest path: **Gradio**. Gradio is built precisely for wrapping Python functions in a web UI very quickly. It has a high-level ChatInterface for chatbot-style UIs, a File component for uploads/downloads, and built-in sharing options so you can expose a prototype fast without making users install anything. For a research or prototype tool, this is often the sweet spot.  ￼
+
+🔵 Better for dashboards and result inspection: **Streamlit**. Streamlit gives you chat elements, file uploaders, tables, widgets, and a more “data app” feel. If your output includes long CSVs, summarized wide outputs, diagnostics, sanity checks, and maybe preview tables or plots, Streamlit is often nicer than a chat-only front end.  ￼
+
+🟣 Best long-term architecture: **FastAPI** backend plus a simple frontend. FastAPI is a production-grade Python API framework, supports file uploads, and has background-task support for jobs that should continue after the initial response. This is the more serious route if you think your prototype could become a real product, not just a demo.  ￼
+
 
 ### TO SEARCH 
 

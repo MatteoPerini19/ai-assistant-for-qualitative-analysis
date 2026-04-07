@@ -1,0 +1,43 @@
+{
+  "column_order": [
+    "run_id",
+    "row_id",
+    "participant_id",
+    "task_id",
+    "model_provider",
+    "model_name",
+    "server_side_version",
+    "method_name",
+    "requested_temperature",
+    "effective_temperature",
+    "prompt_template_file",
+    "prompt_id",
+    "prompt_version",
+    "schema_name",
+    "schema_version",
+    "replicate_id",
+    "task_type",
+    "thinking_budget",
+    "seed",
+    "effective_prompt",
+    "overall_depth_score",
+    "overall_depth_justification",
+    "fundamental_principles_score",
+    "fundamental_principles_justification",
+    "differentiation_score",
+    "differentiation_justification",
+    "integration_score",
+    "integration_justification",
+    "raw_json_output",
+    "parse_status",
+    "validation_error",
+    "error_message"
+  ],
+  "csv_file": "output_ds_inclusive_long.csv",
+  "merge_output": false,
+  "parse_status_counts": {
+    "provider_error": 3
+  },
+  "retain_raw_json_output": true,
+  "row_count": 3
+}
